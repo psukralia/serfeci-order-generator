@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="hi">
+<head>
+  <meta charset="utf-8" />
+  <title>आदेश फॉर्म</title>
+  <style>
+    body{font-family:"Utsah",system-ui,Arial;margin:20px auto;font-size:12px; line-height:1.6}
+    label{display:block; margin-top:10px; font-weight:bold;}
+    textarea,input{width:100%; font-family:monospace; font-size:14px;}
+    textarea{min-height:140px;}
+    .btn{padding:6px 12px; margin-top:10px; cursor:pointer;}
+  </style>
+	
+  <!-- Bootstrap 5.3 CDN CSS -->
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+		<script src="./js/data.js"></script>
+</head>
+<body >
+<div class="container">
+<textarea id="template" style="display:none">{{टेक्स्ट यहाँ पेस्ट है}}</textarea>
+
+<main class="container-fluid mt-3">
+  <!-- Full Width Fields -->
+<div class="input-group mb-2">
+  <span class="input-group-text">बैंक का नाम</span>
+  <input type="text" id="bank" class="form-control" value="">
+</div>
+
+<div class="input-group mb-2">
+  <span class="input-group-text">विपक्षी नाम सहित</span>
+  <input type="text" id="opponent" class="form-control" value="">
+</div>
+
+<div class="input-group mb-2">
+  <span class="input-group-text">सम्पत्ति का विवरण</span>
+  <input type="text" id="property" class="form-control" value="">
+</div>
+
+  <div class="row">
+    <!-- बायाँ हिस्सा: Text Fields -->
+    <div class="col-md-3">
+      <label>लोन की धनराशि</label>
+      <input type="text" id="loan" class="form-control mb-1" value="">
+		</div>
+    <div class="col-md-3">
+      <label>कुल धनराशि</label>
+      <input type="text" id="amount" class="form-control mb-1" value="">
+    </div>
+
+    <!-- दायाँ हिस्सा: Date Fields -->
+    <div class="col-md-3">
+      <label>आवेदन का दिनांक</label>
+      <input type="text" id="date" class="form-control mb-1" value="">
+		</div>
+    <div class="col-md-3">
+      <label>आवेदन अग्रेसित का दिनांक</label>
+      <input type="text" id="forwardDate" class="form-control mb-1" value="">
+		</div>
+    <div class="col-md-3">
+      <label>एन0पी0ए0 का दिनांक</label>
+      <input type="text" id="npaDate" class="form-control mb-1" value="">
+		</div>
+    <div class="col-md-3">
+      <label>13-2 का दिनांक</label>
+      <input type="text" id="d132" class="form-control mb-1" value="">
+		</div>
+    <div class="col-md-3">
+      <label>13-4 का दिनांक</label>
+      <input type="text" id="d134" class="form-control mb-1" value="">
+		</div>
+    <div class="col-md-3">
+      <label>न्यायालय के नोटिस का दिनांक</label>
+      <input type="text" id="noticeDate" class="form-control mb-1" value="">
+    </div>
+  </div>
+
+  <!-- Buttons -->
+	<div class="mt-3 text-end">
+		<button class="btn btn-primary" id="previewBtn">Generate</button>
+		<button class="btn btn-secondary d-none" id="downloadBtn">डाउनलोड</button>
+</div>
+  <!-- परिणाम -->
+  <h5 class="mt-3">परिणाम:</h5>
+  <textarea id="result" class="form-control" rows="22" readonly></textarea>
+</main>    
+   <script>
+  // आदेश का पूरा टेक्स्ट टेम्पलेट (आपका दिया हुआ)
+  document.getElementById("template").value = defaultTemplate;
+
+  function fillTemplate(template, vars) {
+    return template.replace(/{{\s*([^}]+)\s*}}/g, (m, name) => {
+      return (name in vars) ? vars[name] : "";
+    });
+  }
+
+  // Required fields IDs
+  const requiredFields = [
+    "bank",
+    "opponent",
+    "property",
+    "loan",
+    "amount",
+    "date",
+    "forwardDate",
+    "npaDate",
+    "d132",
+    "d134",
+    "noticeDate"
+  ];
+
+  document.getElementById("previewBtn").addEventListener("click", () => {
+    let isValid = true;
+    let missingFields = [];
+
+    requiredFields.forEach(id => {
+      const field = document.getElementById(id);
+      if (!field.value.trim()) {
+        isValid = false;
+        missingFields.push(field.previousElementSibling?.innerText || id);
+        field.classList.add("is-invalid"); // Bootstrap red border
+      } else {
+        field.classList.remove("is-invalid");
+      }
+    });
+
+    if (!isValid) {
+      alert("कृपया सभी अनिवार्य फ़ील्ड भरें:\n" + missingFields.join(", "));
+      return;
+    }
+
+    // Template fill if valid
+    const tpl = document.getElementById("template").value;
+    const vars = {
+      "बैंक का नाम": document.getElementById("bank").value,
+      "आवेदन का दिनांक": document.getElementById("date").value,
+      "आवेदन अग्रेसित का दिनांक": document.getElementById("forwardDate").value,
+      "विपक्षी नाम सहित": document.getElementById("opponent").value,
+      "लोन का अंकन": document.getElementById("loan").value,
+      "एन0पी0ए0 का दिनांक": document.getElementById("npaDate").value,
+      "कुल धनराशि": document.getElementById("amount").value,
+      "13-2 का दिनांक": document.getElementById("d132").value,
+      "13-4 का दिनांक": document.getElementById("d134").value,
+      "सम्पत्ति का विवरण": document.getElementById("property").value,
+      "नोटिस का दिनांक": document.getElementById("noticeDate").value
+    };
+    document.getElementById("result").value = fillTemplate(tpl, vars);
+  });
+
+  document.getElementById("downloadBtn").addEventListener("click", () => {
+    const text = document.getElementById("result").value;
+    const blob = new Blob([text], {type:"text/plain;charset=utf-8"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "aadesh.txt";
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+</script>
+
+</body>
+</html>
