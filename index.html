@@ -56,11 +56,7 @@
     <div class="col-md-3">
       <label>आवेदन अग्रेसित का दिनांक</label>
       <input type="text" id="forwardDate" class="form-control mb-1" value="">
-		</div>
-    <div class="col-md-3">
-      <label>एन0पी0ए0 का दिनांक</label>
-      <input type="text" id="npaDate" class="form-control mb-1" value="">
-		</div>
+		</div> 
     <div class="col-md-3">
       <label>13-2 का दिनांक</label>
       <input type="text" id="d132" class="form-control mb-1" value="">
@@ -74,12 +70,10 @@
       <input type="text" id="noticeDate" class="form-control mb-1" value="">
     </div>
   </div>
-
-  <!-- Buttons -->
-	<div class="mt-3 text-end">
+  <div class="col-md-3"> 
 		<button class="btn btn-primary" id="previewBtn">Generate</button>
 		<button class="btn btn-secondary d-none" id="downloadBtn">डाउनलोड</button>
-</div>
+	</div>
   <!-- परिणाम -->
   <h5 class="mt-3">परिणाम:</h5>
   <textarea id="result" class="form-control" rows="22" readonly></textarea>
@@ -102,8 +96,7 @@
     "loan",
     "amount",
     "date",
-    "forwardDate",
-    "npaDate",
+    "forwardDate", 
     "d132",
     "d134",
     "noticeDate"
@@ -136,8 +129,7 @@
       "आवेदन का दिनांक": document.getElementById("date").value,
       "आवेदन अग्रेसित का दिनांक": document.getElementById("forwardDate").value,
       "विपक्षी नाम सहित": document.getElementById("opponent").value,
-      "लोन का अंकन": document.getElementById("loan").value,
-      "एन0पी0ए0 का दिनांक": document.getElementById("npaDate").value,
+      "लोन का अंकन": document.getElementById("loan").value, 
       "कुल धनराशि": document.getElementById("amount").value,
       "13-2 का दिनांक": document.getElementById("d132").value,
       "13-4 का दिनांक": document.getElementById("d134").value,
